@@ -7,7 +7,7 @@ app.use(express.json());
 
 // Routes
 app.get('/', (req, res) => {
-  res.send('Hello World from Node.js Implemented By Prem Vishwakarma!');
+  res.send('Hello World from Node.js!');
 });
 
 app.get('/api/health', (req, res) => {
@@ -19,4 +19,5 @@ app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 
 });
+
 
