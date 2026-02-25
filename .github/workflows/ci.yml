@@ -1,24 +1,25 @@
-name: Simple Node CI
+name: Deploy to EC2
 
 on:
   push:
     branches: [ "main" ]
 
 jobs:
-  ci-check:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.0.0
         with:
-          node-version: 18
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run CI check
-        run: npm run ci
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd ${{ secrets.APP_PATH }}
+            git pull origin main
+            npm install
+            pm2 restart simple-node-app || pm2 start index.js --name simple-node-app
